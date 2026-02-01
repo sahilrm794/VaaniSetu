@@ -1,0 +1,23 @@
+{
+  "title": "Company Policy: Returns, Refunds, Cancellations & Delivery Timelines",
+  "sections": {
+    "return_and_refund_policies": {
+      "description": "Clear and transparent return and refund procedures foster trust and help customers shop with confidence. A well-defined policy also protects the business by setting expectations for timeframes, conditions and processes. According to industry guidance, ecommerce stores commonly allow returns within a finite window rather than indefinitely."
+    },
+    "eligibility_and_timeline": {
+      "return_window": "Customers have up to 30 days from the date of delivery to request a return or exchange. Return windows may range from 15 to 30 days, with some product categories having shorter windows of 7–10 days.",
+      "condition": "Items must be unused, in their original packaging, and include all tags and proof of purchase. Personalized, perishable, or final-sale products are non-returnable.",
+      "exceptions": "For hygiene and safety reasons, certain personal care products, consumables, and digital downloads cannot be returned."
+    },
+    "process_for_returns": {
+      "initiating_return": "Contact customer support with your order ID and the reason for the return. Documentation such as photos may be requested to confirm product condition.",
+      "authorization": "Once approved, you will receive a return authorization and shipping instructions. Returns sent without authorization may be refused.",
+      "shipping_costs": "Return shipping is covered for damaged, defective, or incorrect items. For change-of-mind returns, customers may be responsible for return shipping and restocking fees."
+    },
+    "refunds_and_exchanges": {
+      "modes_of_refund": "Refunds can be issued to the original payment method, as store credit, or by exchanging the item for another product.",
+      "processing_time": "Refunds are processed within 7–10 business days after the returned item passes inspection.",
+      "exchanges": "Exchanges depend on stock availability. If the requested replacement is unavailable, a refund or store credit will be offered."
+    }
+  }
+}

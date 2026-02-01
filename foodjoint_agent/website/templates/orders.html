@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders | FoodJoint</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0f1a;
+      --bg-card: #111827;
+      --bg-card-hover: #1f2937;
+      --border: #1f2937;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --primary: #22c55e;
+      --primary-dim: rgba(34, 197, 94, 0.15);
+      --secondary: #3b82f6;
+      --secondary-dim: rgba(59, 130, 246, 0.15);
+      --accent: #f59e0b;
+      --danger: #ef4444;
+      --radius: 12px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .nav-link:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--primary);
+    }
+
+    .nav-link .material-symbols-rounded {
+      font-size: 18px;
+    }
+
+    /* Stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stat-label .material-symbols-rounded {
+      font-size: 16px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .stat-value.primary { color: var(--primary); }
+    .stat-value.secondary { color: var(--secondary); }
+    .stat-value.accent { color: var(--accent); }
+
+    /* Search */
+    .search-section {
+      margin-bottom: 24px;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 12px;
+      max-width: 500px;
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 12px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .search-btn {
+      padding: 12px 20px;
+      background: var(--primary);
+      border: none;
+      border-radius: var(--radius);
+      color: #000;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .search-btn:hover {
+      opacity: 0.9;
+    }
+
+    /* Orders Table */
+    .orders-section h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .orders-table {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .orders-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .orders-table th,
+    .orders-table td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .orders-table th {
+      background: rgba(255,255,255,0.02);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+    }
+
+    .orders-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .orders-table tr:hover td {
+      background: rgba(255,255,255,0.02);
+    }
+
+    .order-id {
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 13px;
+      color: var(--secondary);
+    }
+
+    .customer-name {
+      font-weight: 500;
+    }
+
+    .order-total {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .order-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .order-status.confirmed {
+      background: var(--primary-dim);
+      color: var(--primary);
+    }
+
+    .order-status.pending {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--accent);
+    }
+
+    .order-time {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .view-btn {
+      padding: 6px 12px;
+      background: var(--secondary-dim);
+      border: none;
+      border-radius: 6px;
+      color: var(--secondary);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .view-btn:hover {
+      background: var(--secondary);
+      color: #fff;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-state .material-symbols-rounded {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .empty-state p {
+      font-size: 15px;
+    }
+
+    /* Order Detail Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 80vh;
+      overflow: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-header h3 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .modal-close:hover {
+      background: var(--bg-card-hover);
+      color: var(--text);
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .order-detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .order-detail-row:last-child {
+      border-bottom: none;
+    }
+
+    .order-detail-label {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .order-detail-value {
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .order-items-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin: 16px 0 12px;
+      color: var(--text-muted);
+    }
+
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .order-item-name {
+      font-weight: 500;
+    }
+
+    .order-item-qty {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .order-item-price {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .order-item-addons {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container { padding: 16px; }
+      .header { margin-bottom: 24px; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .orders-table { overflow-x: auto; }
+      .orders-table table { min-width: 600px; }
+    }
+
+    /* Refresh indicator */
+    .refresh-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="header-left">
+        <a href="/" class="logo">
+          <div class="logo-icon">FJ</div>
+          <span class="logo-text">FoodJoint</span>
+        </a>
+      </div>
+      <a href="/" class="nav-link">
+        <span class="material-symbols-rounded">mic</span>
+        Voice Order
+      </a>
+    </header>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-label">
+          <span class="material-symbols-rounded">receipt_long</span>
+          Total Orders
+        </div>
+        <div class="stat-value primary" id="totalOrders">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">
+          <span class="material-symbols-rounded">payments</span>
+          Total Revenue
+        </div>
+        <div class="stat-value secondary" id="totalRevenue">$0.00</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">
+          <span class="material-symbols-rounded">shopping_cart</span>
+          Avg Order Value
+        </div>
+        <div class="stat-value accent" id="avgOrder">$0.00</div>
+      </div>
+    </div>
+
+    <div class="search-section">
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search by Order ID or Customer Name...">
+        <button class="search-btn" onclick="searchOrders()">Search</button>
+      </div>
+    </div>
+
+    <div class="orders-section">
+      <h2>
+        <span class="material-symbols-rounded">list_alt</span>
+        Recent Orders
+      </h2>
+      <div class="orders-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Time</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody">
+            <tr>
+              <td colspan="6">
+                <div class="empty-state">
+                  <span class="material-symbols-rounded">inbox</span>
+                  <p>No orders yet. Place an order using voice!</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="refresh-note">
+        <span class="material-symbols-rounded" style="font-size: 14px;">info</span>
+        Orders refresh automatically every 10 seconds
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Detail Modal -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Order Details</h3>
+        <button class="modal-close" onclick="closeModal()">
+          <span class="material-symbols-rounded">close</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Content loaded dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let allOrders = [];
+
+    async function fetchOrders() {
+      try {
+        const response = await fetch('/api/orders');
+        const data = await response.json();
+        allOrders = data.orders || [];
+        updateStats(data);
+        renderOrders(allOrders);
+      } catch (err) {
+        console.error('Failed to fetch orders:', err);
+      }
+    }
+
+    function updateStats(data) {
+      document.getElementById('totalOrders').textContent = data.total_orders || 0;
+      document.getElementById('totalRevenue').textContent = '$' + (data.total_revenue || 0).toFixed(2);
+      document.getElementById('avgOrder').textContent = '$' + (data.avg_order || 0).toFixed(2);
+    }
+
+    function formatTime(timestamp) {
+      if (!timestamp) return '-';
+      const date = new Date(timestamp);
+      return date.toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+    }
+
+    function renderOrders(orders) {
+      const tbody = document.getElementById('ordersBody');
+
+      if (!orders || orders.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6">
+              <div class="empty-state">
+                <span class="material-symbols-rounded">inbox</span>
+                <p>No orders found</p>
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = orders.map(order => `
+        <tr>
+          <td><span class="order-id">${order.order_id}</span></td>
+          <td><span class="customer-name">${order.customer_name}</span></td>
+          <td><span class="order-total">$${order.total_amount.toFixed(2)}</span></td>
+          <td><span class="order-status ${order.status}">${order.status}</span></td>
+          <td><span class="order-time">${formatTime(order.created_at)}</span></td>
+          <td><button class="view-btn" onclick="viewOrder('${order.order_id}')">View</button></td>
+        </tr>
+      `).join('');
+    }
+
+    function searchOrders() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      if (!query) {
+        renderOrders(allOrders);
+        return;
+      }
+
+      const filtered = allOrders.filter(order =>
+        order.order_id.toLowerCase().includes(query) ||
+        order.customer_name.toLowerCase().includes(query)
+      );
+      renderOrders(filtered);
+    }
+
+    document.getElementById('searchInput').addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') searchOrders();
+    });
+
+    async function viewOrder(orderId) {
+      try {
+        const response = await fetch(`/api/orders/${orderId}`);
+        const order = await response.json();
+
+        if (order.error) {
+          alert('Order not found');
+          return;
+        }
+
+        const itemsHtml = (order.items || []).map(item => `
+          <div class="order-item">
+            <div>
+              <div class="order-item-name">${item.item_name}</div>
+              <div class="order-item-qty">Qty: ${item.quantity}</div>
+              ${item.addons && item.addons.length ? `<div class="order-item-addons">${item.addons.join(', ')}</div>` : ''}
+            </div>
+            <div class="order-item-price">$${(item.item_price * item.quantity).toFixed(2)}</div>
+          </div>
+        `).join('');
+
+        document.getElementById('modalBody').innerHTML = `
+          <div class="order-detail-row">
+            <span class="order-detail-label">Order ID</span>
+            <span class="order-detail-value">${order.order_id}</span>
+          </div>
+          <div class="order-detail-row">
+            <span class="order-detail-label">Customer</span>
+            <span class="order-detail-value">${order.customer_name}</span>
+          </div>
+          <div class="order-detail-row">
+            <span class="order-detail-label">Status</span>
+            <span class="order-detail-value"><span class="order-status ${order.status}">${order.status}</span></span>
+          </div>
+          <div class="order-detail-row">
+            <span class="order-detail-label">Time</span>
+            <span class="order-detail-value">${formatTime(order.created_at)}</span>
+          </div>
+          <div class="order-detail-row">
+            <span class="order-detail-label">Total</span>
+            <span class="order-detail-value" style="color: var(--primary); font-size: 18px;">$${order.total_amount.toFixed(2)}</span>
+          </div>
+          <div class="order-items-title">Items</div>
+          ${itemsHtml || '<p style="color: var(--text-muted);">No items</p>'}
+        `;
+
+        document.getElementById('modalOverlay').classList.add('active');
+      } catch (err) {
+        console.error('Failed to fetch order:', err);
+        alert('Failed to load order details');
+      }
+    }
+
+    function closeModal(event) {
+      if (!event || event.target === document.getElementById('modalOverlay')) {
+        document.getElementById('modalOverlay').classList.remove('active');
+      }
+    }
+
+    // Initial fetch
+    fetchOrders();
+
+    // Auto-refresh every 10 seconds
+    setInterval(fetchOrders, 10000);
+  </script>
+</body>
+</html>
