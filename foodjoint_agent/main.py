@@ -61,6 +61,9 @@ def _env_flag(name: str, default: bool = False) -> bool:
 
 app = FastAPI(title="E-commerce Voice Agent (CAG)")
 
+@app.on_event("startup")
+def on_startup():
+    Base.metadata.create_all(bind=engine)
 website_files_path = Path(__file__).parent / "website"
 app.mount("/static", StaticFiles(directory=website_files_path / "static"), name="static")
 templates = Jinja2Templates(directory=website_files_path / "templates")
