@@ -1,31 +1,38 @@
-# FoodJoint Voice Agent
+# E-commerce Voice Agent 
 
-A voice-powered food ordering assistant built with Google's Gemini Live audio API. Uses Cache-Augmented Generation (CAG) architecture for instant menu responses.
+A voice-powered e-commerce customer support assistant built with Google's Gemini Live audio API. Uses Cache-Augmented Generation (CAG) architecture for instant policy responses.
 
 ## Features
 
-- **Voice Ordering** - Natural conversation with real-time speech recognition
-- **CAG Architecture** - Full menu embedded in context for zero-latency menu queries
-- **Modern UI** - Clean, responsive web interface with green/blue theme
-- **Order Management** - Complete cart operations (add, remove, update, confirm)
-- **Analytics Dashboard** - Streamlit-based order tracking and insights
+- **Voice Customer Support** - Natural conversation with real-time speech recognition
+- **CAG Architecture** - Company policies embedded in context for zero-latency policy queries
+- **Modern UI** - Clean, responsive web interface (inherited from FoodJoint)
+- **Product Search** - Search by name or category with fuzzy matching
+- **Order Management** - Track orders, cancel orders (policy-aware), initiate returns
+- **FAQ Support** - Search across 750+ product FAQs
+- **13 Specialized Tools** - Product search, order tracking, cancellations, returns
+
+## Dataset
+
+- **125 Products** across 5 categories (Electronics, Clothing, Home & Kitchen, Beauty & Personal Care, Sports & Fitness)
+- **100 Orders** with various statuses
+- **750+ FAQs** (6 per product)
+- **Company Policies** (return, refund, cancellation - embedded in CAG)
 
 ## Quick Start
 
 ### 1. Install Dependencies
 
 ```bash
-cd FoodJointAgent
+cd FoodJoint
 pip install -r requirements.txt
 ```
 
 ### 2. Configure Environment
 
-```bash
-cp .env.sample .env
-```
+The `.env` file should already be configured with your Gemini API key from the FoodJoint setup.
 
-Edit `.env` and add your Gemini API key:
+If not, edit `.env`:
 
 ```env
 GEMINI_API_KEY=your_api_key_here
@@ -39,62 +46,62 @@ uvicorn foodjoint_agent.main:app --reload --host 0.0.0.0 --port 8000
 
 Open http://localhost:8000 in your browser.
 
-### 4. View Orders
+## How It Works
 
-The orders dashboard is built into the app. After placing an order via voice, click **"View Orders"** in the UI or go to:
+1. **User speaks** → Audio captured at 16kHz PCM
+2. **WebSocket** → Audio streamed to server (same as FoodJoint)
+3. **Gemini Live** → Real-time speech-to-text + response generation (same as FoodJoint)
+4. **CAG** → Policy queries answered instantly from embedded context
+5. **Tools** → Product/order operations executed via function calls
+6. **Response** → Audio played back at 24kHz (same as FoodJoint)
 
-```
-http://localhost:8000/orders
-```
+## Customer Support Tools
 
-### 5. Run Streamlit Dashboard (Optional)
+| Tool | Description |
+|------|-------------|
+| `search_products_by_name` | Fuzzy search products by name |
+| `search_products_by_category` | Search by category with price filters |
+| `get_product_details` | Get detailed product information |
+| `check_product_availability` | Check stock availability |
+| `get_product_faqs` | Get product-specific FAQs |
+| `track_order` | Track order by Order ID |
+| `get_customer_orders` | Get customer's recent orders |
+| `get_order_details` | Get detailed order information |
+| `cancel_order` | Cancel order (policy-aware) |
+| `initiate_return` | Initiate product return (policy-aware) |
+| `search_faqs` | Search across all FAQs |
+| `get_all_categories` | List product categories |
 
-For more detailed analytics, you can also run the Streamlit dashboard:
+## Example Queries
 
-```bash
-streamlit run dashboard.py
-```
+### Product Search
+- "Show me laptops under $500"
+- "I'm looking for running shoes"
+- "Do you have any smartphones?"
 
-## Project Structure
+### Product Information
+- "Tell me about product P1001"
+- "What's the price of the Dell laptop?"
+- "Is this product in stock?"
 
-```
-FoodJointAgent/
-├── .env.sample              # Environment variables template
-├── dashboard.py             # Streamlit order management dashboard
-├── requirements.txt         # Python dependencies
-├── README.md                # This file
-│
-├── database/
-│   ├── food_menu.json       # Menu items (55 items)
-│   └── orders.db            # SQLite database (auto-created)
-│
-└── foodjoint_agent/
-    ├── __init__.py
-    ├── main.py              # FastAPI server & WebSocket handler
-    ├── prompts.py           # System prompts with embedded menu
-    ├── cag_menu_builder.py  # Menu formatting for context
-    ├── agent_tools.py       # Cart/order tool implementations
-    ├── order_manager.py     # Shopping cart state management
-    ├── menu_utils.py        # Menu validation
-    ├── db_utils.py          # SQLite persistence
-    │
-    └── website/
-        ├── templates/
-        │   └── chat.html    # Voice ordering web UI
-        └── static/
-            └── main.js      # Audio capture & WebSocket client
-```
+### Order Tracking
+- "Where is my order O0001?"
+- "Track order O0050"
+- "Show me my recent orders for customer C0001"
 
-## Menu Categories
+### Order Management
+- "I want to cancel order O0001"
+- "Can I return product P1001 from my order?"
+- "What's your return policy?"
 
-| Category | Items | Price Range |
-|----------|-------|-------------|
-| Mains | Burgers, Sandwiches, Hot Dogs | $4.99 - $9.99 |
-| Sides | Fries, Nuggets, Tenders, Rings | $2.49 - $7.99 |
-| Drinks | Sodas, Shakes, Coffee, Tea | $1.79 - $4.49 |
-| Desserts | Cookies, Pies, Ice Cream | $1.49 - $3.99 |
-| Extras | Sauces, Toppings | $0.00 - $1.49 |
-| Kids | Kids Meals | $4.99 - $5.99 |
+## Tech Stack
+
+- **Backend**: FastAPI, Uvicorn, SQLite (same as FoodJoint)
+- **AI**: Google Gemini Live (native audio) (same as FoodJoint)
+- **Frontend**: HTML5, CSS3, JavaScript (inherited from FoodJoint)
+- **Audio**: Web Audio API, PCM 16-bit (same as FoodJoint)
+- **Search**: Rapidfuzz for fuzzy matching
+- **Database**: SQLite with indexed queries
 
 ## Configuration Options
 
@@ -105,54 +112,25 @@ FoodJointAgent/
 | `GEMINI_LIVE_VOICE` | `Kore` | Voice preset |
 | `GEMINI_LIVE_USE_CLIENT_VAD` | `false` | Use client-side voice detection |
 
-## API Endpoints
+## Architecture Highlights
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/` | GET | Voice ordering web interface |
-| `/orders` | GET | Orders dashboard page |
-| `/api/orders` | GET | Get all orders with stats (JSON) |
-| `/api/orders/{id}` | GET | Get specific order details (JSON) |
-| `/session` | WebSocket | Real-time audio/transcript stream |
-| `/health` | GET | Health check |
+**What Changed from FoodJoint:**
+- ✅ Replaced menu management with product catalog (125 products)
+- ✅ Replaced cart operations with customer support tools
+- ✅ Replaced menu CAG with policy CAG (return/refund policies)
+- ✅ Added fuzzy search for products
+- ✅ Added order tracking and management
+- ✅ Added FAQ search functionality
 
-## How It Works
-
-1. **User speaks** → Audio captured at 16kHz PCM
-2. **WebSocket** → Audio streamed to server
-3. **Gemini Live** → Real-time speech-to-text + response generation
-4. **CAG** → Menu queries answered instantly from embedded context
-5. **Tools** → Cart operations executed via function calls
-6. **Response** → Audio played back at 24kHz
-
-## Agent Tools
-
-| Tool | Description |
-|------|-------------|
-| `add_to_order` | Add items to cart |
-| `remove_from_order` | Remove items from cart |
-| `update_order_quantity` | Change item quantity |
-| `update_order_item` | Modify item addons |
-| `view_current_order` | Get cart summary |
-| `confirm_and_save_order` | Finalize and save order |
-| `clear_current_order` | Empty the cart |
-
-## Dashboard Features
-
-- **Overview** - Key metrics and recent orders
-- **Search** - Find orders by ID or customer name
-- **All Orders** - Table view with filtering
-- **Analytics** - Sales trends and top items
-- **Menu** - Browse and filter menu items
-
-## Tech Stack
-
-- **Backend**: FastAPI, Uvicorn, SQLite
-- **AI**: Google Gemini Live (native audio)
-- **Frontend**: HTML5, CSS3, JavaScript (vanilla)
-- **Dashboard**: Streamlit, Pandas
-- **Audio**: Web Audio API, PCM 16-bit
+**What Stayed the Same (Working Components):**
+- ✅ WebSocket infrastructure
+- ✅ Gemini Live API integration
+- ✅ Audio streaming (16kHz input, 24kHz output)
+- ✅ Filler audio generation
+- ✅ Concurrent tool execution
+- ✅ Session management structure
+- ✅ Web UI and frontend
 
 ## License
 
-MIT
+MIT (inherited from FoodJoint)
